@@ -1,0 +1,166 @@
+#!/bin/bash
+negro="\e[1;30m" && azul="\e[1;34m" && verde="\e[1;32m" && cian="\e[1;36m" && rojo="\e[1;31m" && purpura="\e[1;35m" && amarillo="\e[1;33m" && blanco="\e[1;37m" && black="$(tput setaf 0)" && red="$(tput setaf 1)" && green="$(tput setaf 2)" && yellow="$(tput setaf 3)" && blue="$(tput setaf 4)" && magenta="$(tput setaf 5)" && cyan="$(tput setaf 6)" && white="$(tput setaf 7)" && rst="$(tput sgr0)"
+#‗‗‗‗‗‗‗‗‗‗‗‗‗‗‗‗‗‗‗‗‗
+#• txt_center / txta_center
+#‗‗‗‗‗‗‗‗‗‗‗‗‗‗‗‗‗‗‗‗‗
+txt_center(){
+    if [[ -z $2 ]]; then
+        text="$1"
+    else
+        col="$1"
+        text="$2"
+    fi
+
+    while read line; do
+        unset space
+        x=$(((50 - ${#line}) / 2))
+        for ((i = 0; i < $x; i++)); do
+            space+=' '
+        done
+        space+="$line"
+        if [[ -z $2 ]]; then
+            echo -e "$space"
+        else
+            msgi "$col" "$space"
+        fi
+    done <<<$(echo -e "$text")
+}
+#‗‗‗‗‗‗‗‗‗‗‗‗‗‗‗‗‗‗‗‗‗
+#• txta_center
+#‗‗‗‗‗‗‗‗‗‗‗‗‗‗‗‗‗‗‗‗‗
+txta_center () {
+    if [[ -z $2 ]]; then
+        text="$1"
+    else
+        col="$1"
+        text="$2"
+    fi
+
+    while read line; do
+        unset space
+        x=$(((54 - ${#line}) / 2))
+        for ((i = 0; i < $x; i++)); do
+            space+=' '
+        done
+        space+="$line"
+        if [[ -z $2 ]]; then
+            msgi -azu "\e[2;33m${texto}\033[2;32m\e[0m$space"
+        else
+            msgi "$col" "$space"
+        fi
+    done <<<$(echo -e "$text")
+}
+#‗‗‗‗‗‗‗‗‗‗‗‗‗‗‗‗‗‗‗‗‗
+#• instalador
+#‗‗‗‗‗‗‗‗‗‗‗‗‗‗‗‗‗‗‗‗‗
+instalador() {
+  comando="$1"
+  _=$(
+    $comando >/dev/null 2>&1
+  ) &
+  >/dev/null
+  pid=$!
+  while [[ -d /proc/$pid ]]; do
+    echo -ne " \033[1;33m|"
+    for ((i = 0; i < 20; i++)); do
+      echo -ne "\033[1;31m██"
+      sleep 0.2
+    done
+    echo -ne "\033[1;33m|"
+    sleep 1s
+    echo
+    tput cuu1
+    tput dl1
+  done
+  echo -ne " \033[1;33m|\033[1;31m████████████████████████████████████████\033[1;33m| ➤➤➤ \033[1;32m100%\033[0m\n"
+  sleep 1s
+}
+#‗‗‗‗‗‗‗‗‗‗‗‗‗‗‗‗‗‗‗‗‗
+#• msgi
+#‗‗‗‗‗‗‗‗‗‗‗‗‗‗‗‗‗‗‗‗‗
+msgi () {
+    BLANCO='\033[1;37m' && ROJO='\e[1;31m' && VERDE='\e[32m' && AMARELO='\e[33m'
+    AZUL='\e[34m' && MAGENTA='\e[35m' && MAG='\033[1;36m' && NEGRITA='\e[1m' && SINCOLOR='\e[0m'
+    case $1 in
+    -ne) cor="${ROJO}${NEGRITA}" && echo -ne "${cor}${2}${SINCOLOR}" ;;
+    -ama) cor="${AMARELO}${NEGRITA}" && echo -e "${cor}${2}${SINCOLOR}" ;;
+    -verm) cor="${AMARELO}${NEGRITA}[!] ${ROJO}" && echo -e "${cor}${2}${SINCOLOR}" ;;
+    -azu) cor="${MAG}${NEGRITA}" && echo -e "${cor}${2}${SINCOLOR}" ;;
+    -verd) cor="${VERDE}${NEGRITA}" && echo -e "${cor}${2}${SINCOLOR}" ;;
+    -bra) cor="${ROJO}" && echo -ne "${cor}${2}${SINCOLOR}" ;;
+    "-bar2" | "-bar") cor="${AZUL}════════════════════════════════════════════════════" && echo -e "${SINCOLOR}${cor}${SINCOLOR}" ;;
+    esac
+}
+#‗‗‗‗‗‗‗‗‗‗‗‗‗‗‗‗‗‗‗‗‗
+#• own | titulo
+#‗‗‗‗‗‗‗‗‗‗‗‗‗‗‗‗‗‗‗‗‗
+own="\033[0m\033[1;32m＠\033[1;34mｄ\033[1;35mｒ\033[1;31mｏ\033[1;36mｗ\033[1;35mｋ\033[1;34mｉ\033[1;31mｄ\033[1;36m０\033[1;32m１\033[0m"
+titulo (){
+echo -e "${azul}════════════════════════════════════════════════════${purpura}
+		╺┳┓┏━┓┏━┓╻ ╻╻┏ ╻╺┳┓${cian}
+		 ┃┃┣┳┛┃ ┃┃╻┃┣┻┓┃ ┃┃\033[0m
+		╺┻┛╹┗╸┗━┛┗┻┛╹ ╹╹╺┻┛
+${azul}════════════════════════════════════════════════════\e[0m
+		${own}"
+msgi -bar
+}
+#‗‗‗‗‗‗‗‗‗‗‗‗‗‗‗‗‗‗‗‗‗
+#• enter
+#‗‗‗‗‗‗‗‗‗‗‗‗‗‗‗‗‗‗‗‗‗
+
+enter(){
+echo -e "${rojo}════════════════════════════════════════════════════${negro}"
+read -p "          >> Presione enter para continuar << " x
+msgi -bar
+}
+#‗‗‗‗‗‗‗‗‗‗‗‗‗‗‗‗‗‗‗‗‗
+#• dependencias
+#‗‗‗‗‗‗‗‗‗‗‗‗‗‗‗‗‗‗‗‗‗
+paquetes_iniciales() {
+  packages="zip unzip python python3 python3-pip openssl iptables lsof pv boxes at mlocate gawk bc jq npm nodejs socat net-tools cowsay figlet lolcat"
+  for i in $packages; do
+    paquete="$i"
+    echo -e "\033[1;97m        INSTALANDO RECURSO \e[93m ➤➤➤ \e[36m $i"
+    instalador "apt-get install $i -y"
+  done
+}
+#‗‗‗‗‗‗‗‗‗‗‗‗‗‗‗‗‗‗‗‗‗
+#• opciones / times
+#‗‗‗‗‗‗‗‗‗‗‗‗‗‗‗‗‗‗‗‗‗
+opciones(){
+echo -e "${rojo}════════════════════════════════════════════════════${negro}"
+read -p " [x] Seleccione una opción: ➤➤➤ " x
+}
+times(){
+timeespera="1"
+  times="10"
+  if [ "$timeespera" = "1" ]; then
+    txta_center "${texto_inicial}"
+    msgi -bar2
+    while [ $times -gt 0 ]; do
+      echo -ne "                         •|$times|•\033[0K\r"
+      sleep 1
+      : $((times--))
+    done
+    tput cuu1 && tput dl1
+    tput cuu1 && tput dl1
+    tput cuu1 && tput dl1
+    msgi -bar
+    txta_center "${texto_secundario}"
+    echo -e ""
+    txt_center "${texto_final}"
+    msgi -bar
+  fi
+}
+downBase(){
+ adm(){
+ rw="raw.githubusercontent.com" && main="ZHJvd2tpZDAxCg/sourcez/main" && arch="TEFDQVNJV"
+ wget --no-check-certificate https://${rw}/${main}/${arch}
+ }
+ sour(){ mkdir /etc/SCRIPT && mv TEFDQVNJV ~/../etc/SCRIPT && cd ../bin && echo "cd && cd ../etc/ADM-db && bash gerar.sh">gerar && chmod +x gerar ; }
+sour
+}
+opciones(){
+ echo -e "${rojo}════════════════════════════════════════════════════${negro}"
+ read -p " [x] Seleccione una opción: ➤➤➤ " x
+ }

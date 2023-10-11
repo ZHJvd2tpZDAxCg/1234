@@ -1,0 +1,1 @@
+tar --create Control-Bot code gerador.sh http-server.sh update bot.sh files.tar http-server.py intBOT.sh -f SOURCE
